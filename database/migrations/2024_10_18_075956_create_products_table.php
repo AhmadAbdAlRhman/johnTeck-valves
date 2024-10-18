@@ -19,9 +19,9 @@ return new class extends Migration
             $table->text('ArabicDescription');
             $table->string('TurkishName');
             $table->text('TurkishDescription');
-            $table->string('image');
-            $table->string('pdf');
-            // $table->timestamps();
+            $table->string('image')->nullable();
+            $table->string('pdf')->nullable();
+            $table->timestamps();
         });
     }
 
