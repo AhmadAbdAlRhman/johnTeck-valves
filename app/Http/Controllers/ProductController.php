@@ -48,6 +48,15 @@ class ProductController extends Controller
         }
         return response()->json($product);
     }
+    public function update($id, Request $request){
+    }
+    public function delete($id){
+    }
+    public function show($id){
+    }
+    public function loginAsAdminstrator(Request $request){
+    }
+
 
 
 }
