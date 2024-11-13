@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     public function index(){
@@ -34,4 +35,19 @@ class ProductController extends Controller
         $product = Product::create($requestData);
         return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
     }
+    public function search($nameProduct){
+        $product = Product::where('EnglishName','LIKE','%'.Str::lower($nameProduct).'%')
+                ->orWhere('ArabicName','LIKE','%'.Str::lower($nameProduct).'%')
+                ->orWhere('TurkishName','%'.'LIKE',Str::lower($nameProduct).'%')
+                ->orWhere('EnglishName','%'.'LIKE',Str::upper($nameProduct).'%')
+                ->orWhere('ArabicName','%'.'LIKE',Str::upper($nameProduct).'%')
+                ->orWhere('TurkishName','%'.'LIKE',Str::upper($nameProduct).'%')
+                ->get();
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        return response()->json($product);
+    }
+
+
 }

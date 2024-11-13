@@ -5,3 +5,4 @@ use Illuminate\Http\Request;
 
 Route::get('/products', [ProductController::class,'index']);
 Route::post('/storage',[ProductController::class,'store']);
+Route::get('/products/{nameProducts}', [ProductController::class,'search']);
