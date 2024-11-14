@@ -7,3 +7,4 @@ Route::get('/products', [ProductController::class,'index']);
 Route::get('/product', [ProductController::class,'ShowById']);
 Route::post('/storage',[ProductController::class,'store']);
 Route::get('/products/{nameProducts}', [ProductController::class,'search']);
+Route::post('delete',[ProductController::class,'delete']);

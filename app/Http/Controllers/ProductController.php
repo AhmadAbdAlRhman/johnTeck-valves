@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 class ProductController extends Controller
 {
@@ -50,7 +52,18 @@ class ProductController extends Controller
     }
     public function update($id, Request $request){
     }
-    public function delete($id){
+    public function delete(Request $request){
+        $id = $request->input('id');
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        $imagePath = Storage::disk('public')->path("products/images/{$product->image}");
+        $pdfPath = Storage::disk('public')->path("products/pdfs/{$product->pdf}");
+        File::delete($imagePath);
+        File::delete($pdfPath);
+        $product->delete();
+        return response()->json(['message' => 'Product deleted successfully'], 204);
     }
     public function ShowById(Request $request){
         $validated = $request->validate([
