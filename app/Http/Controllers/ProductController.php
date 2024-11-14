@@ -52,7 +52,15 @@ class ProductController extends Controller
     }
     public function delete($id){
     }
-    public function show($id){
+    public function ShowById(Request $request){
+        $validated = $request->validate([
+            'id'=>'required'
+        ]);
+        $product = Product::where('id' , $request->id)->first();
+        if (!$product){
+            return response()->json(['message'=>'This product is not found']);
+        }
+        return response()->json($product);
     }
     public function loginAsAdminstrator(Request $request){
     }
