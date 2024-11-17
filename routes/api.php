@@ -8,3 +8,4 @@ Route::get('/product', [ProductController::class,'ShowById']);
 Route::post('/storage',[ProductController::class,'store']);
 Route::get('/products/{nameProducts}', [ProductController::class,'search']);
 Route::post('delete',[ProductController::class,'delete']);
+Route::post('updateProduct/{id}',[ProductController::class,'update']);

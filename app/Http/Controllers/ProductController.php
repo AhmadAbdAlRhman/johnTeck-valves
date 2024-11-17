@@ -51,6 +51,49 @@ class ProductController extends Controller
         return response()->json($product);
     }
     public function update($id, Request $request){
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        $validated = $request->validate([
+            'EnglishName' =>'required',
+            'EnglishDescription' =>'required',
+            'ArabicName' =>'required',
+            'ArabicDescription' =>'required',
+            'TurkishName' =>'required',
+            'TurkishDescription' =>'required',
+            'image'=>'nullable|image|mimes:jpeg,png,gif,svg',
+            'pdf'=>'nullable|mimes:pdf'
+        ]);
+        $requestData = $request->all();
+        try{
+            if ($request->hasFile('image')) {
+                $oldImage = "products/images/{$product->image}";
+                if(Storage::disk('public')->exists($oldImage))
+                {
+                    Storage::disk('public')->delete($oldImage);
+                }
+                $imageName = $request->file('image')->getClientOriginalName();
+                $pathImage = $request->file('image')->storeAs('products/images', $imageName, 'public');
+                $requestData['image'] = $imageName;
+            }
+            if ($request->hasFile('pdf')) {
+                $oldPdf = Storage::disk('public')->path("products/pdfs/{$product->pdf}");
+                if(Storage::disk('public')->exists($oldImage))
+                {
+                    Storage::disk('public')->delete($oldPdf);
+                }
+                $pdfName = $request->file('pdf')->getClientOriginalName();
+                $pathPdf = $request->file('pdf')->storeAs('products/pdfs', $pdfName, 'public');
+                $requestData['pdf'] =  $pdfName;
+            }
+            $product->fill($requestData);
+            $product->save();
+            return response()->json(['message' => 'Product updated successfully'], 204);
+        }catch(Exception $e){
+            return response()->json(['message' => 'Error updating product${}' . $e->getMessage()], 500);
+         }
+
     }
     public function delete(Request $request){
         $id = $request->input('id');
