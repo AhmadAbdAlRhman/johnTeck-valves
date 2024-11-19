@@ -15,12 +15,11 @@ class ProductController extends Controller
     }
     public function store(Request $request){
         $validated = $request->validate([
-            'EnglishName' =>'required',
-            'EnglishDescription' =>'required',
-            'ArabicName' =>'required',
-            'ArabicDescription' =>'required',
-            'TurkishName' =>'required',
-            'TurkishDescription' =>'required',
+            'EnglishName' =>'required|string',
+            'EnglishDescription' =>'required|string',
+            'ArabicDescription' =>'nullable|string',
+            'TurkishDescription' =>'nullable|string',
+            'standard'=>'nullable|string',
             'image'=>'nullable|image|mimes:jpeg,png,gif,svg',
             'pdf'=>'nullable|mimes:pdf'
         ]);
@@ -40,11 +39,7 @@ class ProductController extends Controller
     }
     public function search($nameProduct){
         $product = Product::where('EnglishName','LIKE','%'.Str::lower($nameProduct).'%')
-                ->orWhere('ArabicName','LIKE','%'.Str::lower($nameProduct).'%')
-                ->orWhere('TurkishName','%'.'LIKE',Str::lower($nameProduct).'%')
                 ->orWhere('EnglishName','%'.'LIKE',Str::upper($nameProduct).'%')
-                ->orWhere('ArabicName','%'.'LIKE',Str::upper($nameProduct).'%')
-                ->orWhere('TurkishName','%'.'LIKE',Str::upper($nameProduct).'%')
                 ->get();
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
@@ -57,12 +52,11 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
         $validated = $request->validate([
-            'EnglishName' =>'required',
-            'EnglishDescription' =>'required',
-            'ArabicName' =>'required',
-            'ArabicDescription' =>'required',
-            'TurkishName' =>'required',
-            'TurkishDescription' =>'required',
+            'EnglishName' =>'required|string',
+            'EnglishDescription' =>'required|string',
+            'ArabicDescription' =>'nullable|string',
+            'TurkishDescription' =>'nullable|string',
+            'standard'=>'nullable|string',
             'image'=>'nullable|image|mimes:jpeg,png,gif,svg',
             'pdf'=>'nullable|mimes:pdf'
         ]);

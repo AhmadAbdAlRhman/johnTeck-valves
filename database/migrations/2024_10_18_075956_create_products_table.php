@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('EnglishName');
             $table->text('EnglishDescription');
-            $table->string('ArabicName');
             $table->text('ArabicDescription');
-            $table->string('TurkishName');
             $table->text('TurkishDescription');
+            $table->string('standard');
             $table->string('image')->nullable();
             $table->string('pdf')->nullable();
             $table->timestamps();
