@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 class ProductController extends Controller
 {
     public function index(){
@@ -119,8 +120,17 @@ class ProductController extends Controller
         return response()->json($product);
     }
     public function loginAsAdminstrator(Request $request){
+        $adminPassword = env('ADMIN_PASSWORD');
+        $validated = $request->validate
+        ([
+            'password'=>'required'
+        ]);;
+        $inputPassword = $request->password;
+        if(!Hash::check($inputPassword, $adminPassword)){
+            return response()->json(['message'=>'Invalid password'],401);
+        }
+        $token = base64_encode(uniqid());
+        return response()->json(['token'=>$token],200);
     }
-
-
 
 }
