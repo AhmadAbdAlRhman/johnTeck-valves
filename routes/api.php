@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -10,3 +11,6 @@ Route::get('/products/{nameProducts}', [ProductController::class,'search']);
 Route::post('/delete',[ProductController::class,'delete']);
 Route::post('/updateProduct/{id}',[ProductController::class,'update']);
 Route::post('/admin/login',[ProductController::class,'loginAsAdminstrator']);
+
+Route::get('/certificates', [CertificateController::class,'index']);
+Route::post('/certificates/store', [CertificateController::class,'store']);

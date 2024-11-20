@@ -126,5 +126,4 @@ class ProductController extends Controller
         $token = base64_encode(uniqid());
         return response()->json(['token'=>$token],200);
     }
-
 }

@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Product extends Model
+class Certificates extends Model
 {
     use HasFactory;
-    protected $table = 'products';
+    protected $table = 'Certificates';
     // Define which attributes can be mass assigned
     protected $fillable = [
-        'EnglishName',
-        'EnglishDescription',
-        'ArabicDescription',
-        'TurkishDescription',
-        'standard',
         'image',
         'pdf'
     ];
