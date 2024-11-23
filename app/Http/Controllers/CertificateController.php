@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Certificates;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 class CertificateController extends Controller
 {
     public function index(){
@@ -29,4 +32,18 @@ class CertificateController extends Controller
         $certificates = Certificates::create($requestData);
         return response()->json(['message' => 'Certificate created successfully', 'certificate' => $certificates], 201);
     }
+    public function delete(Request $request){
+        $id = $request->input('id');
+        $certificates = Certificates::find($id);
+        if (!$certificates) {
+            return response()->json(['message' => 'Certificates not found'], 404);
+        }
+        $imagePath = Storage::disk('public')->path("Certificates/image/{$certificates->image}");
+        $pdfPath = Storage::disk('public')->path("Certificates/pdf/{$certificates->pdf}");
+        File::delete($imagePath);
+        File::delete($pdfPath);
+        $certificates->delete();
+        return response()->json(['message' => 'Certificate deleted successfully'], 204);
+    }
+
 }

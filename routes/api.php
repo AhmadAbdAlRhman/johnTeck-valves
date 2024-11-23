@@ -14,3 +14,4 @@ Route::post('/admin/login',[ProductController::class,'loginAsAdminstrator']);
 
 Route::get('/certificates', [CertificateController::class,'index']);
 Route::post('/certificates/store', [CertificateController::class,'store']);
+Route::post('/deletecertificates',[CertificateController::class,'delete']);
