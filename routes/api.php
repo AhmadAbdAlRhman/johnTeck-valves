@@ -15,3 +15,9 @@ Route::post('/admin/login',[ProductController::class,'loginAsAdminstrator']);
 Route::get('/certificates', [CertificateController::class,'index']);
 Route::post('/certificates/store', [CertificateController::class,'store']);
 Route::post('/deletecertificates',[CertificateController::class,'delete']);
+Route::fallback(function () {
+    return response()->json(['message' => 'Route Not Found'], 404);
+});
+Route::get('/admin', [ProductController::class,'adminDashboard']);
+Route::get('/search', [ProductController::class,'search']);
+Route::delete('/products/{id}', [ProductController::class,'delete']);

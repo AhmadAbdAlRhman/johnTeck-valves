@@ -115,12 +115,13 @@ class ProductController extends Controller
     }
     public function loginAsAdminstrator(Request $request){
         $adminPassword = env('ADMIN_PASSWORD');
+        $storedPassword = Hash::make($adminPassword);
         $validated = $request->validate
         ([
             'password'=>'required'
-        ]);;
-        $inputPassword = $request->password;
-        if(!Hash::check($inputPassword, $adminPassword)){
+        ]);
+        $inputPassword = Hash::make($request->password);
+        if(strcasecmp($inputPassword, $storedPassword) === 0){
             return response()->json(['message'=>'Invalid password'],401);
         }
         $token = base64_encode(uniqid());
