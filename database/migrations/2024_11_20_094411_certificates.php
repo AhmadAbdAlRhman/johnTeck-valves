@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('Certificates', function (Blueprint $table) {
-            $table->id();
             $table->string('image')->nullable();
             $table->string('pdf')->nullable();
             $table->timestamps();
