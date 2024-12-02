@@ -125,6 +125,6 @@ class ProductController extends Controller
             return response()->json(['message'=>'Invalid password'],401);
         }
         $token = base64_encode(uniqid());
-        return response()->json(['token'=>$token],200);
+        return response()->json(['token'=>$token],200)->cookie('auth_token', $token, 60);
     }
 }

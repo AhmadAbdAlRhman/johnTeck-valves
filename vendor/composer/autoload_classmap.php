@@ -9,6 +9,7 @@ return array(
     'App\\Http\\Controllers\\CertificateController' => $baseDir . '/app/Http/Controllers/CertificateController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\ProductController' => $baseDir . '/app/Http/Controllers/ProductController.php',
+    'App\\Http\\Middleware\\CheckToken' => $baseDir . '/app/Http/Middleware/CheckToken.php',
     'App\\Models\\Certificates' => $baseDir . '/app/Models/Certificates.php',
     'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',

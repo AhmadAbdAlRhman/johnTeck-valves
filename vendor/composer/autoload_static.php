@@ -334,8 +334,8 @@ class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -512,6 +512,7 @@ class ComposerStaticInit589cc0f65c3aaa7d4e9024d545bc1974
         'App\\Http\\Controllers\\CertificateController' => __DIR__ . '/../..' . '/app/Http/Controllers/CertificateController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProductController.php',
+        'App\\Http\\Middleware\\CheckToken' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckToken.php',
         'App\\Models\\Certificates' => __DIR__ . '/../..' . '/app/Models/Certificates.php',
         'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
