@@ -1,66 +1,189 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CORS Middleware for Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Build Status][ico-actions]][link-actions]
+[![Latest Stable Version](https://poser.pugx.org/fruitcake/laravel-cors/version.png)](https://packagist.org/packages/fruitcake/laravel-cors)
+[![Software License][ico-license]](LICENSE.md)
+[![Total Downloads][ico-downloads]][link-downloads]
+[![Fruitcake](https://img.shields.io/badge/Powered%20By-Fruitcake-b2bc35.svg)](https://fruitcake.nl/)
 
-## About Laravel
+Implements https://github.com/fruitcake/php-cors for Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Note for users upgrading to Laravel 9, 10 or higher
+### This package is deprecated because all supported Laravel versions now include the CORS middleware in the core.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Since Laravel 9.2, this Middleware is included in laravel/framework. You can use the provided middleware, which should be compatible with the Middleware and config provided in this package. See https://github.com/laravel/laravel/pull/5825/files for the changes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Steps to upgrade:
+ 1. Remove `"fruitcake/laravel-cors"` from your composer.json
+ 2. Replace `\Fruitcake\Cors\HandleCors::class,` with `\Illuminate\Http\Middleware\HandleCors::class,` in `app/Http/Kernel.php`
 
-## Learning Laravel
+See `https://github.com/fruitcake/php-cors` for advanced usage. The config stays the same.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## About
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The `laravel-cors` package allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
+headers with Laravel middleware configuration.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+If you want to have a global overview of CORS workflow, you can  browse
+this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
-## Laravel Sponsors
+## Upgrading from 0.x (barryvdh/laravel-cors)
+When upgrading from 0.x versions, there are some breaking changes:
+ - **A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default, so fill it correctly!**
+ - **Group middleware is no longer supported, use the global middleware**
+ - The vendor name has changed (see installation/usage)
+ - The casing on the props in `cors.php` has changed from camelCase to snake_case, so if you already have a `cors.php` file you will need to update the props in there to match the new casing.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Features
 
-### Premium Partners
+* Handles CORS pre-flight OPTIONS requests
+* Adds CORS headers to your responses
+* Match routes to only add CORS to certain Requests
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Installation
 
-## Contributing
+Require the `fruitcake/laravel-cors` package in your `composer.json` and update your dependencies:
+```sh
+composer require fruitcake/laravel-cors
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+If you get a conflict, this could be because an older version of barryvdh/laravel-cors or fruitcake/laravel-cors is installed. Remove the conflicting package first, then try install again:
 
-## Code of Conduct
+```sh
+composer remove barryvdh/laravel-cors fruitcake/laravel-cors
+composer require fruitcake/laravel-cors
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Global usage
 
-## Security Vulnerabilities
+To allow CORS for all your routes, add the `HandleCors` middleware at the top of the `$middleware` property of  `app/Http/Kernel.php` class:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```php
+protected $middleware = [
+  \Fruitcake\Cors\HandleCors::class,
+    // ...
+];
+```
+
+Now update the config to define the paths you want to run the CORS service on, (see Configuration below):
+
+```php
+'paths' => ['api/*'],
+```
+
+## Configuration
+
+The defaults are set in `config/cors.php`. Publish the config to copy the file to your own config:
+```sh
+php artisan vendor:publish --tag="cors"
+```
+> **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowed_headers` to include those headers. You can also set it to `['*']` to allow all custom headers.
+
+> **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
+
+
+### Options
+
+| Option                   | Description                                                              | Default value |
+|--------------------------|--------------------------------------------------------------------------|---------------|
+| paths                    | You can enable CORS for 1 or multiple paths, eg. `['api/*'] `            | `[]`          |
+| allowed_methods          | Matches the request method.                                              | `['*']`       |
+| allowed_origins          | Matches the request origin. Wildcards can be used, eg. `*.mydomain.com` or `mydomain.com:*`  | `['*']`       |
+| allowed_origins_patterns | Matches the request origin with `preg_match`.                            | `[]`          |
+| allowed_headers          | Sets the Access-Control-Allow-Headers response header.                   | `['*']`       |
+| exposed_headers          | Sets the Access-Control-Expose-Headers response header.                  | `[]`       |
+| max_age                  | Sets the Access-Control-Max-Age response header.                         | `0`           |
+| supports_credentials     | Sets the Access-Control-Allow-Credentials header.                        | `false`       |
+
+
+`allowed_origins`, `allowed_headers` and `allowed_methods` can be set to `['*']` to accept any value.
+
+> **Note:** For `allowed_origins` you must include the scheme when not using a wildcard, eg. `['http://example.com', 'https://example.com']`. You must also take into account that the scheme will be present when using `allowed_origins_patterns`.
+
+> **Note:** Try to be as specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
+
+> **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
+
+> **Note:** Sometimes it's necessary to specify the port _(when you're coding your app in a local environment for example)_. You can specify the port or using a wildcard here too, eg. `localhost:3000`, `localhost:*` or even using a FQDN `app.mydomain.com:8080`
+
+### Lumen
+
+On Lumen, just register the ServiceProvider manually in your `bootstrap/app.php` file:
+
+```php
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
+```
+
+Also copy the [cors.php](https://github.com/fruitcake/laravel-cors/blob/master/config/cors.php) config file to `config/cors.php` and put it into action:
+
+```php
+$app->configure('cors');
+```
+
+## Global usage for Lumen
+
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware and set the `paths` property in the config.
+
+```php
+$app->middleware([
+    // ...
+    Fruitcake\Cors\HandleCors::class,
+]);
+```
+
+## Common problems
+
+### Wrong config
+
+Make sure the `path` option in the config is correct and actually matches the route you are using. Remember to clear the config cache as well.
+
+### Error handling, Middleware order
+
+Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's the first entry in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors. Also try running it without CORS to make sure it actually works.
+
+### Authorization headers / Credentials
+
+If your Request includes an Authorization header or uses Credentials mode, set the `supports_credentials` value in the config to true. This will set the [Access-Control-Allow-Credentials](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) Header to `true`.
+
+### Echo/die
+
+If you use `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will break the Middleware flow. When output is sent before headers, CORS cannot be added. When the script exits before the CORS middleware finishes, CORS headers will not be added. Always return a proper response or throw an Exception.
+
+### Disabling CSRF protection for your API
+
+If possible, use a route group with CSRF protection disabled.
+Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\VerifyCsrfToken`:
+
+```php
+protected $except = [
+    'api/*',
+    'sub.domain.zone' => [
+      'prefix/*'
+    ],
+];
+```
+
+### Duplicate headers
+The CORS Middleware should be the only place you add these headers. If you also add headers in .htaccess, nginx or your index.php file, you will get duplicate headers and unexpected results.
+
+### No Cross-Site requests
+If you are not doing Cross-Site requests, meaning if you are not requesting site-a.com/api from site-b.com, your browser will not send the `Origin: https://site-b.com` request header, CORS will be "disabled" as the `Access-Control-Allow-Origin` header will be also missing. This happens because requests are being dispatched from the same and no protection is needed in this case.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Released under the MIT License, see [LICENSE](LICENSE).
+
+[ico-version]: https://img.shields.io/packagist/v/fruitcake/laravel-cors.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-actions]: https://github.com/fruitcake/laravel-cors/actions/workflows/run-tests.yml/badge.svg
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/fruitcake/laravel-cors.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/fruitcake/laravel-cors.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/fruitcake/laravel-cors.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/fruitcake/laravel-cors
+[link-actions]: https://github.com/fruitcake/laravel-cors/actions
+[link-scrutinizer]: https://scrutinizer-ci.com/g/fruitcake/laravel-cors/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/fruitcake/laravel-cors
+[link-downloads]: https://packagist.org/packages/fruitcake/laravel-cors
+[link-author]: https://github.com/fruitcake
+[link-contributors]: ../../contributors
