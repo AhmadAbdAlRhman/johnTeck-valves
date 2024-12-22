@@ -114,17 +114,25 @@ class ProductController extends Controller
         return response()->json($product);
     }
     public function loginAsAdminstrator(Request $request){
-        $adminPassword = env('ADMIN_PASSWORD');
-        $storedPassword = Hash::make($adminPassword);
-        $validated = $request->validate
-        ([
-            'password'=>'required'
+        $request->validate([
+            'password' => 'required',
         ]);
-        $inputPassword = Hash::make($request->password);
-        if(strcasecmp($inputPassword, $storedPassword) === 0){
-            return response()->json(['message'=>'Invalid password'],401);
-        }
-        $token = base64_encode(uniqid());
-        return response()->json(['token'=>$token],200)->cookie('auth_token', $token, 60);
+        $adminPasswordHash = env('ADMIN_PASSWORD');
+        $providedPasswordHash = hash('sha256', $request->password);
+        if(hash_equals($adminPasswordHash, $providedPasswordHash)){
+            $token = base64_encode(random_bytes(40));
+            return response()
+            ->json(['token'=>$token],200)
+            ->cookie(
+                'authToken',
+                $token,
+                60, // Expire after 60 minutes
+                null,
+                null,
+                true, // Secure (sent only over HTTPS)
+                true  // HttpOnly (not accessible via JavaScript)
+            );;
+        }//JohnRTechA20Y24S@ad
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
 }
